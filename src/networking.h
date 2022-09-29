@@ -9,8 +9,6 @@
 	int socket_create(char* ip, char* port, t_socket_type type);
 	
 	void socket_destroy(int socket_fd);
-
-	int wait_client(int server_socket);
 	
 	int server_listen(int server_socket, void*(*handler)(void*), void* args);
 

@@ -6,6 +6,7 @@
 
 static int send_all(int socket_fd, void* buffer, size_t size);
 static int recv_all(int socket_fd, void* buffer, size_t size);
+static int wait_client(int server_socket);
 
 int socket_create(char* ip, char* port, t_socket_type type) {
 	struct addrinfo hints;
@@ -38,13 +39,6 @@ void socket_destroy(int socket_fd) {
 	close(socket_fd);
 }
 
-int wait_client(int server_socket) {
-	struct sockaddr_in client_dir;
-	socklen_t addr_size = sizeof(struct sockaddr_in);
-	int client_socket = accept(server_socket, (void*) &client_dir, &addr_size);
-	return client_socket;
-}
-
 int server_listen(int server_socket, void*(*handler)(void*), void* args) {
 	int cliente_socket = wait_client(server_socket);
 
@@ -56,6 +50,13 @@ int server_listen(int server_socket, void*(*handler)(void*), void* args) {
 	}
 	
 	return 0;
+}
+
+static int wait_client(int server_socket) {
+	struct sockaddr_in client_dir;
+	socklen_t addr_size = sizeof(struct sockaddr_in);
+	int client_socket = accept(server_socket, (void*) &client_dir, &addr_size);
+	return client_socket;
 }
 
 static int send_all(int socket_fd, void *buffer, size_t size) {
