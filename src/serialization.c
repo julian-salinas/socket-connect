@@ -27,6 +27,10 @@ void* package_take(t_package* package, size_t size) {
 	return buffer_take(package -> buffer, size);
 }
 
+/***********************
+ *  PRIVATE FUNCTIONS  *
+ ***********************/
+
 static t_buffer* buffer_create(void) {
 	t_buffer* self = malloc(sizeof(t_buffer));
 	self -> size = 0;
@@ -47,7 +51,7 @@ static void buffer_append(t_buffer* buffer, void* data, size_t size) {
 }
 
 static void fix_buffer_size(t_buffer* buffer, size_t size) {
-	while (buffer -> size < buffer -> offset + size) {
+	if (buffer -> size <= buffer -> offset + size) {
 		buffer -> size += size;
 		buffer -> stream = realloc(buffer -> stream, buffer -> size);
 	}
