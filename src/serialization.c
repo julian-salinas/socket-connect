@@ -1,6 +1,5 @@
 #include "serialization.h"
 #include <stdlib.h>
-#include <string.h>
 
 static t_buffer* buffer_create(void);
 static void buffer_destroy(t_buffer* buffer);
@@ -28,7 +27,7 @@ void* package_take(t_package* package, size_t size) {
 	return buffer_take(package -> buffer, size);
 }
 
-t_buffer* buffer_create(void) {
+static t_buffer* buffer_create(void) {
 	t_buffer* self = malloc(sizeof(t_buffer));
 	self -> size = 0;
 	self -> offset = 0;
@@ -36,25 +35,25 @@ t_buffer* buffer_create(void) {
 	return self;
 }
 
-void buffer_destroy(t_buffer* buffer) {
+static void buffer_destroy(t_buffer* buffer) {
 	free(buffer -> stream);
 	free(buffer);
 }
 
-void buffer_append(t_buffer* buffer, void* data, size_t size) {
+static void buffer_append(t_buffer* buffer, void* data, size_t size) {
 	fix_buffer_size(buffer, size);
 	memcpy(buffer -> stream + buffer -> offset, data, size);
 	buffer -> offset += size;
 }
 
-void fix_buffer_size(t_buffer* buffer, size_t size) {
+static void fix_buffer_size(t_buffer* buffer, size_t size) {
 	while (buffer -> size < buffer -> offset + size) {
 		buffer -> size += size;
 		buffer -> stream = realloc(buffer -> stream, buffer -> size);
 	}
 }
 
-void* buffer_take(t_buffer* buffer, size_t size) {
+static void* buffer_take(t_buffer* buffer, size_t size) {
 	void* data = malloc(size);
 	memcpy(data, buffer -> stream + buffer -> offset, size);
 	buffer->offset += size;
