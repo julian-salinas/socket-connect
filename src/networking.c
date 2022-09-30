@@ -47,9 +47,9 @@ int server_listen(int server_socket, void*(*handler)(void*), void* args) {
 			return;
 		}
 		
-		pthread_t hilo;
-		pthread_create(&hilo, NULL, handler, (void*) args);
-		pthread_detach(hilo);
+		pthread_t service_thread;
+		pthread_create(&service_thread, NULL, handler, (void*) args);
+		pthread_detach(service_thread);
 	}
 }
 
