@@ -40,16 +40,17 @@ void socket_destroy(int socket_fd) {
 }
 
 int server_listen(int server_socket, void*(*handler)(void*), void* args) {
-	int cliente_socket = wait_client(server_socket);
+	while (1) {
+		int client_socket = wait_client(server_socket);
 
-	if (cliente_socket != -1) {
+		if (client_socket == -1) {
+			return;
+		}
+		
 		pthread_t hilo;
 		pthread_create(&hilo, NULL, handler, (void*) args);
 		pthread_detach(hilo);
-		return 1;
 	}
-	
-	return 0;
 }
 
 static int wait_client(int server_socket) {
@@ -78,7 +79,7 @@ static int send_all(int socket_fd, void *buffer, size_t size) {
 	return 1;
 }
 
-static int recv_all(int socket, void *dest, size_t size){
+static int recv_all(int socket, void *dest, size_t size) {
 	while (size > 0){
 		int bytes_received = recv(socket, dest, size, 0);
 		
