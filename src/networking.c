@@ -1,4 +1,5 @@
 #include "networking.h"
+#include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
 #include <unistd.h>
@@ -7,6 +8,7 @@
 static int send_all(int socket_fd, void* buffer, size_t size);
 static int recv_all(int socket_fd, void* buffer, size_t size);
 static int wait_client(int server_socket);
+static int socket_get(int socket, void* dest, size_t size);
 
 int socket_create(char* ip, char* port, t_socket_type type) {
 	struct addrinfo hints;
@@ -39,7 +41,7 @@ void socket_destroy(int socket_fd) {
 	close(socket_fd);
 }
 
-int server_listen(int server_socket, void*(*handler)(void*), void* args) {
+void server_listen(int server_socket, void*(*handler)(void*), void* args) {
 	while (1) {
 		int client_socket = wait_client(server_socket);
 
@@ -96,4 +98,41 @@ static int recv_all(int socket, void *dest, size_t size) {
 	}
 
 	return 1;
+}
+
+void send_package(int socket_fd, t_package* package) {
+	send_all(socket_fd, &package -> header, sizeof(uint8_t));
+	send_all(socket_fd, &package -> buffer, package -> buffer -> size);
+}
+
+static int socket_get(int socket, void* dest, size_t size) {
+    if(size != 0){
+        int rc = recv_all(socket, dest, size);
+        
+		if(rc < 1) {
+			return 0;
+		}
+    }
+    return 1;
+}
+
+t_package* recv_package(int socket_fd) {
+	uint8_t header;
+	socket_get(socket_fd, &header, sizeof(uint8_t));
+
+	size_t buffer_size;
+	if (!socket_get(socket_fd, &buffer_size, sizeof(size_t))) {
+		return NULL;
+	}
+
+	t_package *package = package_create(header);
+	package -> buffer -> size = buffer_size;
+	package -> buffer -> stream = malloc(buffer_size);
+
+	if (!socket_get(socket_fd, package -> buffer -> stream, buffer_size)) {
+		package_destroy(package);
+		return NULL;
+	}
+
+	return package;
 }
