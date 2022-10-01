@@ -13,6 +13,15 @@
 	} t_socket_type;
 
 	/**
+	* @NAME: t_server_args
+	* @DESC: Argumentos para el hilo del servidor.
+	*/
+	typedef struct {
+		int socket_fd;
+		void* data;
+	} t_server_args;
+
+	/**
 	* @NAME: socket_create
 	* @DESC: Crea un socket de un tipo indicado.
 	* @PARAMS:
@@ -45,6 +54,16 @@
 	*   socket_fd - Socket servidor.
 	*   handler   - Función a ejecutar cuando se reciba una conexión.
 	*   args      - Argumentos a pasar a la función handler.
+	*
+	* El handler recibirá como argumento al cliente conectado, para poder sustraerlo, se debe
+	* utilizar de la siguiente forma (ejemplo):
+	*
+	* void handler(void* args) {
+	*	int socket_fd = (int) (t_server_args*) args -> socket;
+	*	void* data = (t_server_args*) args -> data;
+	*	free(args);
+	*	// ...
+	* }
 	*/	
 	void server_listen(int server_socket, void*(*handler)(void*), void* args);
 

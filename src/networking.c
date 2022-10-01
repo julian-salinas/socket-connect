@@ -48,7 +48,11 @@ void server_listen(int server_socket, void*(*handler)(void*), void* args) {
 		if (client_socket == -1) {
 			return;
 		}
-		
+
+		t_server_args* server_args = malloc(sizeof(t_server_args));
+		server_args -> socket_fd = client_socket;
+		server_args -> data = args;
+
 		pthread_t service_thread;
 		pthread_create(&service_thread, NULL, handler, (void*) args);
 		pthread_detach(service_thread);
