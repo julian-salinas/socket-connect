@@ -109,9 +109,9 @@ static int recv_all(int socket, void *dest, size_t size) {
 	return 1;
 }
 
-int socket_get(int socket, void* dest, size_t size){
+int socket_get(int socket_fd, void* dest, size_t size) {
     if(size != 0) {
-        int rcv = recv_all(socket, dest, size);
+        int rcv = recv_all(socket_fd, dest, size);
         
 		if (rcv < 1) {
 			return 0;
@@ -120,8 +120,8 @@ int socket_get(int socket, void* dest, size_t size){
     return 1;
 }
 
-void socket_send(int socket, void* src, size_t size) {
-	send_all(socket, src, size);
+void socket_send(int socket_fd, void* src, size_t size) {
+	send_all(socket_fd, src, size);
 }
 
 void send_package(int socket_fd, t_package* package) {

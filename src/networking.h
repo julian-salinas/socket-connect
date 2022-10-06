@@ -66,7 +66,27 @@
 	* }
 	*/	
 	void server_listen(int server_socket, void*(*handler)(void*), void* args);
+	
+	/**
+	* @NAME: socket_send
+	* @DESC: Envia un mensaje a través de un socket.
+	* @PARAMS:
+	*   socket_fd - Socket al cual enviar el mensaje.
+	*   message   - Puntero al contenido que se desea enviar
+	*   size      - Tamaño del contenido a enviar.
+	*/
+	void socket_send(int socket_fd, void* src, size_t size);
 
+	/**
+	* @NAME: socket_get
+	* @DESC: Recibe un mensaje a través de un socket.
+	* @PARAMS:
+	*   socket_fd - Socket del cual recibir el mensaje.
+	*   message   - Puntero al contenido donde se guardará el mensaje.
+	*   size      - Tamaño del contenido a recibir.
+	*/
+	int socket_get(int socket_fd, void* dest, size_t size);
+	
 	/**
 	* @NAME: send_package
 	* @DESC: Envia un paquete a un socket.
