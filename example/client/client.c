@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     char* str = "Hola que tal";
     uint32_t numero_random = 1234;
 
-    package_add_str(package, "Hola mundo");
+    package_add_str(package, str);
     package_add(package, &numero_random, sizeof(uint32_t));
 
     send_package(socket_fd, package);

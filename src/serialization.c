@@ -1,9 +1,8 @@
 #include "serialization.h"
 #include <stdlib.h>
-#include <stdio.h> // sacar
 
-t_buffer* buffer_create(void);
-void buffer_destroy(t_buffer* buffer);
+static t_buffer* buffer_create(void);
+static void buffer_destroy(t_buffer* buffer);
 static void buffer_add(t_buffer* buffer, void* data, size_t size);
 static void fix_buffer_size(t_buffer* buffer, size_t size);
 static void* buffer_take(t_buffer* buffer, size_t size);
@@ -45,7 +44,7 @@ char* package_take_str(t_package* package) {
  *  PRIVATE FUNCTIONS  *
  ***********************/
 
-t_buffer* buffer_create(void) {
+static t_buffer* buffer_create(void) {
 	t_buffer* self = malloc(sizeof(t_buffer));
 	self -> size = 0;
 	self -> offset = 0;
@@ -53,7 +52,7 @@ t_buffer* buffer_create(void) {
 	return self;
 }
 
-void buffer_destroy(t_buffer* buffer) {
+static void buffer_destroy(t_buffer* buffer) {
 	if (buffer -> offset > 0) {
 		free(buffer -> stream);
 	}

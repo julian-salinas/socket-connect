@@ -6,14 +6,9 @@
 #include <unistd.h>
 #include <pthread.h>
 
+static int wait_client(int server_socket);
 static int send_all(int socket_fd, void* buffer, size_t size);
 static int recv_all(int socket_fd, void* buffer, size_t size);
-static int wait_client(int server_socket);
-static int socket_get(int socket, void* dest, size_t size);
-static uint8_t recv_header(int socket);
-static t_buffer* recv_buffer(int socket);
-extern t_buffer* buffer_create(void);
-extern void buffer_destroy(t_buffer* buffer);
 
 int socket_create(char* ip, char* port, t_socket_type type) {
 	struct addrinfo hints;
@@ -63,50 +58,6 @@ void server_listen(int server_socket, void*(*handler)(void*), void* args) {
 		pthread_create(&service_thread, NULL, handler, (void*) server_args);
 		pthread_detach(service_thread);
 	}
-}
-
-static int wait_client(int server_socket) {
-	struct sockaddr_in client_dir;
-	socklen_t addr_size = sizeof(struct sockaddr_in);
-	int client_socket = accept(server_socket, (void*) &client_dir, &addr_size);
-	return client_socket;
-}
-
-static int send_all(int socket_fd, void *buffer, size_t size) {
-	while (size > 0) {
-		int bytes_sent = send(socket_fd, buffer, size, 0);
-		
-		if (bytes_sent == 0) {
-			return 0;
-		}
-			
-		if (bytes_sent < 0) {
-			return -1;
-		}
-
-		buffer += bytes_sent;
-		size -= bytes_sent;
-	}
-
-	return 1;
-}
-
-static int recv_all(int socket, void *dest, size_t size) {
-	while (size > 0){
-		int bytes_received = recv(socket, dest, size, 0);
-		
-		if (bytes_received == 0) {
-			return 0;
-		} 
-		
-		if (bytes_received < 0) {
-			return -1;
-		} 
-
-		dest += bytes_received;
-		size -= bytes_received;
-	}
-	return 1;
 }
 
 int socket_get(int socket_fd, void* dest, size_t size) {
@@ -160,4 +111,52 @@ t_package* recv_package(int socket_fd) {
 	}
 
 	return package;
+}
+
+/***********************
+ *  PRIVATE FUNCTIONS  *
+ ***********************/
+
+static int wait_client(int server_socket) {
+	struct sockaddr_in client_dir;
+	socklen_t addr_size = sizeof(struct sockaddr_in);
+	int client_socket = accept(server_socket, (void*) &client_dir, &addr_size);
+	return client_socket;
+}
+
+static int send_all(int socket_fd, void *buffer, size_t size) {
+	while (size > 0) {
+		int bytes_sent = send(socket_fd, buffer, size, 0);
+		
+		if (bytes_sent == 0) {
+			return 0;
+		}
+			
+		if (bytes_sent < 0) {
+			return -1;
+		}
+
+		buffer += bytes_sent;
+		size -= bytes_sent;
+	}
+
+	return 1;
+}
+
+static int recv_all(int socket, void *dest, size_t size) {
+	while (size > 0){
+		int bytes_received = recv(socket, dest, size, 0);
+		
+		if (bytes_received == 0) {
+			return 0;
+		} 
+		
+		if (bytes_received < 0) {
+			return -1;
+		} 
+
+		dest += bytes_received;
+		size -= bytes_received;
+	}
+	return 1;
 }

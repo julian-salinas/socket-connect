@@ -1,0 +1,1 @@
+gcc client.c ../../src/*.c -lpthread -o client.out
