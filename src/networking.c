@@ -106,7 +106,6 @@ static int recv_all(int socket, void *dest, size_t size) {
 		dest += bytes_received;
 		size -= bytes_received;
 	}
-
 	return 1;
 }
 
@@ -121,10 +120,14 @@ int socket_get(int socket, void* dest, size_t size){
     return 1;
 }
 
+void socket_send(int socket, void* src, size_t size) {
+	send_all(socket, src, size);
+}
+
 void send_package(int socket_fd, t_package* package) {
-	send_all(socket_fd, &package -> header, sizeof(uint8_t));
-	send_all(socket_fd, (void*) &package -> buffer -> offset, sizeof(uint32_t));
-	send_all(socket_fd, (void*) &package -> buffer -> stream, package -> buffer -> offset);
+	socket_send(socket_fd, &package -> header, sizeof(uint8_t));
+	socket_send(socket_fd, (void*) &package -> buffer -> offset, sizeof(uint32_t));
+	socket_send(socket_fd, (void*) package -> buffer -> stream, package -> buffer -> offset);
 }
 
 t_package* recv_package(int socket_fd) {
@@ -145,8 +148,9 @@ t_package* recv_package(int socket_fd) {
 		return NULL;
 	}
 
-	package -> buffer -> size = buffer_size;
+	package -> buffer = malloc(sizeof(t_buffer));
 	package -> buffer -> offset = 0;
+	package -> buffer -> size = buffer_size;
 	package -> buffer -> stream = malloc(buffer_size);
 
 	// Receive buffer

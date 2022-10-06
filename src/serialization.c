@@ -38,7 +38,7 @@ char* package_take_str(t_package* package) {
 	uint32_t* string_size = (uint32_t*) package_take(package, sizeof(uint32_t));
 	char* str = (char*) package_take(package, *string_size);
 	free(string_size);
-	return NULL;
+	return str;
 }
 
 /***********************
