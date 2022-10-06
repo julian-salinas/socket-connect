@@ -9,40 +9,24 @@ void process_connection(void* args);
 int main(int argc, char** argv) {
     int socket_fd = socket_create("127.0.0.1", "8000", TYPE_SOCKET_SERVER);
     server_listen(socket_fd, (void*) process_connection, NULL);
+    return 0;
 }
 
 void process_connection(void* args) {
-    int socket_fd = (int) ((t_server_args*) args) -> socket_fd;
-    char* name = ((t_server_args*) args) -> data;
+    t_server_args* server_args = (t_server_args*) args;
+    int socket_fd = server_args -> socket_fd;
+
+    printf("Client connected! SID: %d\n", socket_fd);
 
     t_package* package = recv_package(socket_fd);
-
     if (package == NULL) {
         printf("Connection closed by client\n");
         return;
     }
 
-    printf("Received package with header %d and buffer size %d\n", package -> header, package -> buffer -> size);
+    printf("Received package with header %d and buffer size %d - offset: %d\n", 
+            package -> header, package -> buffer -> size, package -> buffer -> offset);
 
-    switch (package -> header) {
-        case 0: // Mensaje
-            int* message_size = package_take(package, sizeof(uint32_t));
-            char* message = package_take(package, *message_size);
-            printf("Received message: %s\n", message);
-            free(message_size);
-            free(message);
-            break;
-        
-        case 1: // Fecha
-            int* dia = package_take(package, sizeof(int32_t));
-            int* mes = package_take(package, sizeof(int32_t));
-            int* anio = package_take(package, sizeof(int32_t));
-
-            printf("Received date: %d/%d/%d\n", *dia, *mes, *anio);
-
-            free(dia);
-            free(mes);
-            free(anio);
-            break;
-    }
+    char* str = package_take_str(package);
+    printf("Received string: %s\n", str);
 }

@@ -1,4 +1,5 @@
 #include "networking.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
@@ -9,6 +10,10 @@ static int send_all(int socket_fd, void* buffer, size_t size);
 static int recv_all(int socket_fd, void* buffer, size_t size);
 static int wait_client(int server_socket);
 static int socket_get(int socket, void* dest, size_t size);
+static uint8_t recv_header(int socket);
+static t_buffer* recv_buffer(int socket);
+extern t_buffer* buffer_create(void);
+extern void buffer_destroy(t_buffer* buffer);
 
 int socket_create(char* ip, char* port, t_socket_type type) {
 	struct addrinfo hints;
@@ -42,6 +47,7 @@ void socket_destroy(int socket_fd) {
 }
 
 void server_listen(int server_socket, void*(*handler)(void*), void* args) {
+	printf("Server listening!\n");
 	while (1) {
 		int client_socket = wait_client(server_socket);
 
@@ -54,7 +60,7 @@ void server_listen(int server_socket, void*(*handler)(void*), void* args) {
 		server_args -> data = args;
 
 		pthread_t service_thread;
-		pthread_create(&service_thread, NULL, handler, (void*) args);
+		pthread_create(&service_thread, NULL, handler, (void*) server_args);
 		pthread_detach(service_thread);
 	}
 }
@@ -104,35 +110,46 @@ static int recv_all(int socket, void *dest, size_t size) {
 	return 1;
 }
 
-void send_package(int socket_fd, t_package* package) {
-	send_all(socket_fd, &package -> header, sizeof(uint8_t));
-	send_all(socket_fd, &package -> buffer, package -> buffer -> size);
-}
-
-static int socket_get(int socket, void* dest, size_t size) {
-    if(size != 0){
-        int rc = recv_all(socket, dest, size);
+int socket_get(int socket, void* dest, size_t size){
+    if(size != 0) {
+        int rcv = recv_all(socket, dest, size);
         
-		if(rc < 1) {
+		if (rcv < 1) {
 			return 0;
 		}
     }
     return 1;
 }
 
+void send_package(int socket_fd, t_package* package) {
+	send_all(socket_fd, &package -> header, sizeof(uint8_t));
+	send_all(socket_fd, (void*) &package -> buffer -> offset, sizeof(uint32_t));
+	send_all(socket_fd, (void*) &package -> buffer -> stream, package -> buffer -> offset);
+}
+
 t_package* recv_package(int socket_fd) {
 	uint8_t header;
-	socket_get(socket_fd, &header, sizeof(uint8_t));
 
-	size_t buffer_size;
-	if (!socket_get(socket_fd, &buffer_size, sizeof(size_t))) {
+	// Receive header
+	if (!socket_get(socket_fd, &header, sizeof(uint8_t))) {
 		return NULL;
 	}
 
-	t_package *package = package_create(header);
+	t_package* package = package_create(header);
+
+	uint32_t buffer_size;
+	
+	// Receive buffer size
+	if (!socket_get(socket_fd, &buffer_size, sizeof(uint32_t))) {
+		package_destroy(package);
+		return NULL;
+	}
+
 	package -> buffer -> size = buffer_size;
+	package -> buffer -> offset = 0;
 	package -> buffer -> stream = malloc(buffer_size);
 
+	// Receive buffer
 	if (!socket_get(socket_fd, package -> buffer -> stream, buffer_size)) {
 		package_destroy(package);
 		return NULL;

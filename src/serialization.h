@@ -43,14 +43,14 @@
 	void package_destroy(t_package* package);
 
 	/**
-	* @NAME: package_append
+	* @NAME: package_add
 	* @DESC: Agrega datos al buffer de un paquete.
 	* @PARAMS:
 	*   package - Puntero al paquete al cual agregar datos.
 	*   data    - Dato/s a agregar.
 	*   size    - Tamaño de los datos a agregar.
 	*/
-	void package_append(t_package* package, void* data, size_t size);
+	void package_add(t_package* package, void* data, size_t size);
 
 	/**
 	* @NAME: package_take	
@@ -60,5 +60,24 @@
 	*   size    - Tamaño del dato que se quiere obtener.
 	*/
 	void* package_take(t_package* package, size_t size);
+
+	/**
+	* @NAME: package_add_str
+	* @DESC: Agrega una cadena de caracteres al buffer de un paquete. Toma la precaución de agregar
+	*        el tamaño de la cadena al principio del buffer.
+	* @PARAMS:
+	*   package - Puntero al paquete al cual agregar datos.
+	*   str     - Cadena de caracteres a agregar.
+	*/
+	void package_add_str(t_package* package, char* str);
+
+	/**
+	* @NAME: package_take_str
+	* @DESC: Obtiene una cadena de caracteres de un paquete (deserializa). Primero obtiene el tamaño de la cadena,
+	*        luego obtiene la cadena.
+	* @PARAMS:
+	*   package - Puntero al paquete del cual obtener datos.
+	*/
+	char* package_take_str(t_package* package);
 
 #endif /* SERIALIZATION_H */
