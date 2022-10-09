@@ -23,11 +23,6 @@ void process_connection(int socket_fd, void* args) {
 		return;
 	}
 
-	if (package == NULL) {
-		printf("Nothing received >:(\n");
-		return;
-	}
-
 	printf("Received package with header %d and buffer size %d\n", 
 			package -> header, package -> buffer -> size);
 
@@ -36,6 +31,11 @@ void process_connection(int socket_fd, void* args) {
 
 	printf("Received string: %s\n", str);
 	printf("Received number: %d\n", *numero_random);
+
+	printf("Sending response...\n");
+	t_package *response = package_create(5); // random operation code (5)
+	package_add_str(response, "Hola, soy el server!");
+	send_package(socket_fd, response);
 
 	socket_destroy(socket_fd);
 }
