@@ -13,15 +13,6 @@
 	} t_socket_type;
 
 	/**
-	* @NAME: t_server_args
-	* @DESC: Argumentos para el hilo del servidor.
-	*/
-	typedef struct {
-		int socket_fd;
-		void* data;
-	} t_server_args;
-
-	/**
 	* @NAME: socket_create
 	* @DESC: Crea un socket de un tipo indicado.
 	* @PARAMS:
