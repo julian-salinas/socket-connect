@@ -31,7 +31,7 @@ make install
 # How to use it
 Compile linking `-lconnect`
 
-For including in your files, you must use the format `connect/networking.h` or `connect/serialization.h`
+For including in your files, you must use the format `connect/networking.h` and/or `connect/serialization.h`
 
 example:
 ```c
