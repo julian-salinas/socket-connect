@@ -18,6 +18,8 @@ int main(int argc, char** argv) {
 	send_package(socket_fd, package);
 	
 	package_destroy(package);
+
+	socket_destroy(socket_fd);
 	
 	return 0;
 }

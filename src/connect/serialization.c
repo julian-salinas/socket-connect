@@ -5,7 +5,7 @@ static t_buffer* buffer_create(void);
 static void buffer_destroy(t_buffer* buffer);
 static void buffer_add(t_buffer* buffer, void* data, size_t size);
 static void fix_buffer_size(t_buffer* buffer, size_t size);
-static void* buffer_take(t_buffer* buffer, size_t size);
+static void* buffer_get(t_buffer* buffer, size_t size);
 
 t_package* package_create(uint8_t header) {
 	t_package* self = malloc(sizeof(t_package));
@@ -23,8 +23,8 @@ void package_add(t_package* package, void* data, size_t size) {
 	buffer_add(package -> buffer, data, size);
 }
 
-void* package_take(t_package* package, size_t size) {
-	return buffer_take(package -> buffer, size);
+void* package_get(t_package* package, size_t size) {
+	return buffer_get(package -> buffer, size);
 }
 
 void package_add_str(t_package* package, char* str) {
@@ -33,9 +33,9 @@ void package_add_str(t_package* package, char* str) {
 	package_add(package, (void*) str, string_size);
 }
 
-char* package_take_str(t_package* package) {
-	uint32_t* string_size = (uint32_t*) package_take(package, sizeof(uint32_t));
-	char* str = (char*) package_take(package, *string_size);
+char* package_get_str(t_package* package) {
+	uint32_t* string_size = (uint32_t*) package_get(package, sizeof(uint32_t));
+	char* str = (char*) package_get(package, *string_size);
 	free(string_size);
 	return str;
 }
@@ -72,14 +72,9 @@ static void fix_buffer_size(t_buffer* buffer, size_t size) {
 	}
 }
 
-static void _buffer_take(t_buffer* buffer, void** dest, size_t size) {
-	*dest = calloc(1, size);
-    memcpy(*dest, buffer -> stream + buffer->offset, size);
-    buffer -> offset += size;
-}
-
-static void* buffer_take(t_buffer* buffer, size_t size) {
-	void* data = NULL;
-	_buffer_take(buffer, &data, size);
+static void* buffer_get(t_buffer* buffer, size_t size) {
+	void* data = malloc(size);
+	memcpy(data, buffer -> stream + buffer -> offset, size);
+	buffer -> offset += size;
 	return data;
 }

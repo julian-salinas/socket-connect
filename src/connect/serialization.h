@@ -53,13 +53,13 @@
 	void package_add(t_package* package, void* data, size_t size);
 
 	/**
-	* @NAME: package_take	
+	* @NAME: package_get	
 	* @DESC: Obtiene un valor de un paquete (deserializa).
 	* @PARAMS:
 	*   package - Puntero al paquete del cual obtener datos.
 	*   size    - Tamaño del dato que se quiere obtener.
 	*/
-	void* package_take(t_package* package, size_t size);
+	void* package_get(t_package* package, size_t size);
 
 	/**
 	* @NAME: package_add_str
@@ -72,12 +72,12 @@
 	void package_add_str(t_package* package, char* str);
 
 	/**
-	* @NAME: package_take_str
+	* @NAME: package_get_str
 	* @DESC: Obtiene una cadena de caracteres de un paquete (deserializa). Primero obtiene el tamaño de la cadena,
 	*        luego obtiene la cadena.
 	* @PARAMS:
 	*   package - Puntero al paquete del cual obtener datos.
 	*/
-	char* package_take_str(t_package* package);
+	char* package_get_str(t_package* package);
 
 #endif /* SERIALIZATION_H */

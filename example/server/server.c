@@ -27,9 +27,11 @@ void process_connection(void* args) {
 	printf("Received package with header %d and buffer size %d\n", 
 			package -> header, package -> buffer -> size, package -> buffer -> offset);
 
-	char* str = package_take_str(package);
-	uint32_t* numero_random = (uint32_t*) package_take(package, sizeof(uint32_t));
+	char* str = package_get_str(package);
+	uint32_t* numero_random = (uint32_t*) package_get(package, sizeof(uint32_t));
 
 	printf("Received string: %s\n", str);
 	printf("Received number: %d\n", *numero_random);
+
+	socket_destroy(socket_fd);
 }
