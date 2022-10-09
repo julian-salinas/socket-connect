@@ -17,8 +17,14 @@ void process_connection(int socket_fd, void* args) {
 	printf("Client connected! SID: %d\n", socket_fd);
 
 	t_package* package = recv_package(socket_fd);
+
+	if (package -> header < 0) {
+		printf("Client disconnected! SID: %d\n", socket_fd);
+		return;
+	}
+
 	if (package == NULL) {
-		printf("Connection closed by client\n");
+		printf("Nothing received >:(\n");
 		return;
 	}
 
