@@ -13,3 +13,5 @@ RUN git clone https://github.com/sisoputnfrba/so-commons-library \
     && rm -rf so-commons-library
 
 COPY . .
+
+RUN make && make install

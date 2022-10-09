@@ -1,1 +1,1 @@
-gcc client.c ../../src/*.c -lpthread -o client.out
+gcc client.c -lpthread -lconnect -o client.out

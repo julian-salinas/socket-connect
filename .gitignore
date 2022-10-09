@@ -1,1 +1,13 @@
+.project
+.cproject
+.settings
+*.o
 *.out
+*.so
+*.d
+*.mk
+*.a
+Release
+Debug
+build
+test_save_config.cfg

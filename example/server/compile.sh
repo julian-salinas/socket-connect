@@ -1,1 +1,1 @@
-gcc server.c ../../src/*.c -lpthread -o server.out
+gcc server.c -lpthread -lconnect -o server.out
