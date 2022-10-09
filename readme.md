@@ -28,7 +28,7 @@ make
 make install
 ```
 
-# How to include the library in your files
+# How to use it
 Compile linking `-lconnect`
 
 For including in your files, you must use the format `connect/networking.h` or `connect/serialization.h`
@@ -42,3 +42,6 @@ int main(int argc, char** argv) {
     // ...
 }
 ```
+
+# Examples of usage
+In the folder [example](/example) you will find an example of a client code and also an example of a server code. You can compile each one using the `compile.sh` file of the module and see it by yourself.
