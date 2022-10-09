@@ -25,7 +25,7 @@ void process_connection(void* args) {
 	}
 
 	printf("Received package with header %d and buffer size %d\n", 
-			package -> header, package -> buffer -> size, package -> buffer -> offset);
+			package -> header, package -> buffer -> size);
 
 	char* str = package_get_str(package);
 	uint32_t* numero_random = (uint32_t*) package_get(package, sizeof(uint32_t));

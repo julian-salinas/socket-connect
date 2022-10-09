@@ -1,1 +1,0 @@
-gcc client.c -lpthread -lconnect -o client.out
