@@ -43,5 +43,5 @@ int main(int argc, char** argv) {
 }
 ```
 
-# Examples of usage
+# Usage examples
 In the folder [example](/example) you will find an example of a client code and also an example of a server code. You can compile each one using the `compile.sh` file of the module and see it by yourself.
