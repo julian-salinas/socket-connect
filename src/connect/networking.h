@@ -55,17 +55,10 @@
 	*   handler   - Función a ejecutar cuando se reciba una conexión.
 	*   args      - Argumentos a pasar a la función handler.
 	*
-	* El handler recibirá como argumento al cliente conectado, para poder sustraerlo, se debe
-	* utilizar de la siguiente forma (ejemplo):
-	*
-	* void handler(void* args) {
-	*	int socket_fd = (int) (t_server_args*) args -> socket;
-	*	void* data = (t_server_args*) args -> data;
-	*	free(args);
-	*	// ...
-	* }
+	* El handler debe ser una función de tipo void(int, void*), donde el primer parámetro que recibe
+	* es el socket del cliente que se conectó y el segundo parámetro es un puntero a los argumentos
 	*/	
-	void server_listen(int server_socket, void*(*handler)(void*), void* args);
+	void server_listen(int server_socket, void(*handler)(int, void*), void* args);
 	
 	/**
 	* @NAME: socket_send

@@ -41,21 +41,22 @@ void socket_destroy(int socket_fd) {
 	close(socket_fd);
 }
 
-void server_listen(int server_socket, void*(*handler)(void*), void* args) {
+void server_listen(int server_socket, void(*handler)(int, void*), void* args) {
 	printf("Server listening!\n");
+
 	while (1) {
 		int client_socket = wait_client(server_socket);
+
+		void _handler(void* server_args) {
+			handler(client_socket, server_args);
+		}
 
 		if (client_socket == -1) {
 			return;
 		}
 
-		t_server_args* server_args = malloc(sizeof(t_server_args));
-		server_args -> socket_fd = client_socket;
-		server_args -> data = args;
-
 		pthread_t service_thread;
-		pthread_create(&service_thread, NULL, handler, (void*) server_args);
+		pthread_create(&service_thread, NULL, (void*) _handler, args);
 		pthread_detach(service_thread);
 	}
 }

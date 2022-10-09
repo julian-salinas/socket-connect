@@ -4,17 +4,15 @@
 #include "connect/networking.h"
 #include "connect/serialization.h"
 
-void process_connection(void* args);
+void process_connection(int socket_fd, void* args);
 
 int main(int argc, char** argv) {
 	int socket_fd = socket_create("127.0.0.1", "8000", TYPE_SOCKET_SERVER);
-	server_listen(socket_fd, (void*) process_connection, NULL);
+	server_listen(socket_fd, process_connection, NULL);
 	return 0;
 }
 
-void process_connection(void* args) {
-	t_server_args* server_args = (t_server_args*) args;
-	int socket_fd = server_args -> socket_fd;
+void process_connection(int socket_fd, void* args) {
 
 	printf("Client connected! SID: %d\n", socket_fd);
 
