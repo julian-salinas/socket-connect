@@ -1,14 +1,14 @@
 services:
-  ejemplos_so:
+  connect:
     tty: true
     
     build:
       context: .
       dockerfile: Dockerfile
     
-    container_name: sisop
+    container_name: connect
 
     volumes:
       - type: bind
         source: .
-        target: /home/sisop
+        target: /home/c-connect

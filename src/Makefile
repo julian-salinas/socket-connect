@@ -9,7 +9,6 @@ ifneq ($(shell id -un),root)
 SUDO=sudo
 endif
 
-# Clean and compile .so
 all: build/libconnect.so
 
 build/connect:
@@ -21,15 +20,12 @@ build/libconnect.so: build/connect $(OBJS)
 build/%.o: %.c
 	$(CC) -c -fmessage-length=0 -fPIC -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 
-# Add debug parameters and compile
 debug: CC += -DDEBUG -g
 debug: all
 
-# Print all sources
 sources:
 	@echo $(C_SRCS) $(H_SRCS)
 
-# Clean build files
 clean:
 	$(RM) build
 
