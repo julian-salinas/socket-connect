@@ -35,8 +35,8 @@ For including in your files, you must use the format `connect/networking.h` and/
 
 example:
 ```c
-#include "connect/networking.h"
-#include "connect/serialization.h"
+#include <connect/networking.h>
+#include <connect/serialization.h>
 
 int main(int argc, char** argv) {
     // ...
