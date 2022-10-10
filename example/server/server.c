@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "connect/networking.h"
-#include "connect/serialization.h"
+#include <connect/networking.h>
+#include <connect/serialization.h>
 
 void process_connection(int socket_fd, void* args);
 

@@ -7,7 +7,10 @@ clean:
 debug:
 	-cd src && $(MAKE) debug
 
-install:
+test: all
+	cd tests/unit-tests && $(MAKE) test
+
+install: test
 	-cd src && $(MAKE) install
 
 uninstall:

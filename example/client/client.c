@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "connect/networking.h"
-#include "connect/serialization.h"
+#include <connect/networking.h>
+#include <connect/serialization.h>
 
 int main(int argc, char** argv) {
 	int socket_fd = socket_create("127.0.0.1", "8000", TYPE_SOCKET_CLIENT);
