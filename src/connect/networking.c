@@ -52,6 +52,8 @@ void server_listen(int server_socket, void(*handler)(int, void*), void* args) {
 		}
 
 		if (client_socket == -1) {
+			printf("Error accepting client!\n");
+			socket_destroy(server_socket);
 			return;
 		}
 
