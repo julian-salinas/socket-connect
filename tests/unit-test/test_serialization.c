@@ -3,7 +3,7 @@
 
 context (test_serialization) {
 
-	describe("create and destroy a package") {
+	describe("Serialization Tests") {
 		
 		it("create a package with header 5") {
 			t_package* package = package_create(5);
