@@ -102,6 +102,7 @@ t_package* recv_package(int socket_fd) {
 		return NULL;
 	}
 
+	// Create empty buffer
 	package -> buffer = malloc(sizeof(t_buffer));
 	package -> buffer -> offset = 0;
 	package -> buffer -> size = buffer_size;
