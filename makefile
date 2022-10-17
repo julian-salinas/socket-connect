@@ -8,7 +8,7 @@ debug:
 	-cd src && $(MAKE) debug
 
 test: all
-	-cd tests/unit-tests && $(MAKE) test
+	-cd tests && $(MAKE) test
 
 install: test
 	-cd src && $(MAKE) install

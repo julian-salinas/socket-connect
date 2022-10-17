@@ -1,7 +1,7 @@
 RM=rm -rf
 CC=gcc
 
-BASE_DIR=../..
+BASE_DIR=..
 
 C_SPEC=$(BASE_DIR)/cspec
 C_SPEC_BIN=$(C_SPEC)/release
