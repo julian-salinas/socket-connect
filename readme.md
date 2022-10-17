@@ -1,7 +1,8 @@
 # c-connect
 
 This library contains functions of networking and serialization for connecting your modules by
-socket the easiest way possible.
+socket the easiest way possible. For your mental health, these functions are tested and you can
+[see the tests for yourself](/tests/).
 
 # Installation guide
 
