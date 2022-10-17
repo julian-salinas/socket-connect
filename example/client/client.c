@@ -7,7 +7,7 @@
 int main(int argc, char** argv) {
 	int socket_fd = socket_create("127.0.0.1", "8000", TYPE_SOCKET_CLIENT);
 
-	t_package* package = package_create(5);
+	t_package* package = package_create(5); // 5 would be the header (operation code). remember: enum element == uint8_t
 	
 	char* str = "Hola que tal";
 	uint32_t numero_random = 1234;
