@@ -65,6 +65,7 @@ context(test_networking) {
 
 			should_int(socket_fd) not be equal to(-1);
 
+			socket_destroy(socket_fd);
 			sem_post(&server_down);
 		} end
 
@@ -89,8 +90,10 @@ context(test_networking) {
 			package_destroy(response);
 
 			should_string(response_message) be equal to(request_message);
-			sem_post(&server_down);
 
+			free(response_message);
+			socket_destroy(socket_fd);
+			sem_post(&server_down);
 		} end
 		
 		it ("Send numbers to the server and get the result of making the sum") {
@@ -116,7 +119,10 @@ context(test_networking) {
 			package_destroy(response);
 
 			should_int(*result) be equal to(first_number + second_number);
+			
+			free(result);
 
+			socket_destroy(socket_fd);
 			sem_post(&server_down);
 		} end
 
