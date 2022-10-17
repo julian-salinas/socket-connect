@@ -24,9 +24,9 @@ int socket_create(char* ip, char* port, t_socket_type type) {
 	int socket_fd = socket(server_info -> ai_family, server_info -> ai_socktype, server_info -> ai_protocol);
 
 	if (type == TYPE_SOCKET_SERVER) {
+		setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
 		bind(socket_fd, server_info -> ai_addr, server_info -> ai_addrlen);
 		listen(socket_fd, SOMAXCONN);
-		setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
 	}
 	else {
 		connect(socket_fd, server_info -> ai_addr, server_info -> ai_addrlen);
