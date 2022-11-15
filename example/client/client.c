@@ -10,10 +10,10 @@ int main(int argc, char** argv) {
 	t_package* package = package_create(5); // 5 would be the header (operation code). remember: enum element == uint8_t
 	
 	char* str = "Hola que tal";
-	uint32_t numero_random = 1234;
+	uint32_t random_number = 1234;
 
 	package_add_str(package, str);
-	package_add(package, &numero_random, sizeof(uint32_t));
+	package_add(package, &random_number, sizeof(uint32_t));
 
 	send_package(socket_fd, package);
 	

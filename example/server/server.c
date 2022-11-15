@@ -27,10 +27,10 @@ void process_connection(int socket_fd, void* args) {
 			package -> header, package -> buffer -> size);
 
 	char* str = package_get_str(package);
-	uint32_t* numero_random = (uint32_t*) package_get(package, sizeof(uint32_t));
+	uint32_t* random_number = (uint32_t*) package_get(package, sizeof(uint32_t));
 
 	printf("Received string: %s\n", str);
-	printf("Received number: %d\n", *numero_random);
+	printf("Received number: %d\n", *random_number);
 
 	printf("Sending response...\n");
 	t_package *response = package_create(5); // random operation code (5)
